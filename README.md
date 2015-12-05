@@ -1,2 +1,2 @@
-# sonicK
-My SonicPi code.
+# sonic(K)
+My SonicPi code experiments.
