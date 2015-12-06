@@ -1,0 +1,58 @@
+# Summoned Chance and Tweeting
+# summonedChance.txt 07Nov2015
+# coded by sonic(K)
+###########################################
+
+live_loop :syn do
+  use_bpm [100, 120].choose
+  puts "bpm = #{current_bpm}"
+  with_synth :fm do
+    a=rrand_i(51, 60)+12
+    b=rrand_i(61, 70)+13
+    c=rrand_i(71, 80)+14
+    d=c-[a,b].choose+[36, 42, 48].choose
+
+    with_fx :echo, phase: 0.1, decay: 1 do
+      play_pattern_timed [a, b, c, d], \
+        [[0.25,0.75].choose, [0.125,0.5].choose], \
+        pan: [-0.3, 0.0, 0.3].choose, \
+        pan_slide: 1, \
+        attack: 0.031, \
+        release: 2, \
+        cutoff: rrand(40, 80), \
+        divisor: rrand(0.1, 5), \
+        env_curve: 4, depth: 0.75
+      if one_in(2)
+        sample [:drum_cymbal_open, :perc_bell, :elec_chime].choose, \
+          pan: rrand(-0.5, 0.5), \
+          rate: rrand(-0.5, 1), \
+          cutoff: rrand(90, 120)
+      else
+        with_fx :reverb, mix: 0.5, pre_amp: 1.5 do
+          puts "reverb"
+          sample [:drum_cymbal_open, :perc_bell, :elec_chime].choose, \
+            pan: rrand(-0.7, 0.7), \
+            rate: rrand(-0.5, 1), \
+            cutoff: rrand(90, 120)
+        end
+      end
+      sleep [0.25, 0.5, 1, 2].choose
+    end
+  end
+end
+
+live_loop :twitter, delay: 160 do
+  with_synth [:mod_pulse, :mod_sine, :mod_saw].choose do
+    if one_in (4)
+      play_pattern_timed \
+        [80, 83, [90, 93, 91].choose], [0.5], \
+        mod_phase: [0.5, 0.25, 1].choose, \
+        pan: rrand(-1, 1), \
+        pan_slide: 0.5, \
+        amp: 0.3, cutoff: [40, 45, 50].choose
+    else
+      puts "sleeping"
+      sleep [0.5, 1].choose
+    end
+  end
+end
