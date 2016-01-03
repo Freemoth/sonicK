@@ -1,0 +1,202 @@
+# fragments/chung.txt 11Dec2015
+# audio recording no. 1 and 2 12Dec2015
+# Hint of Blue Mario
+
+use_debug false
+
+x, y, z = 0, 0, 90
+
+3.times do
+  with_fx :reverb, mix: 0.25 do
+    play sample :bd_808, amp: 2
+    with_fx :hpf, cutoff: 90 do
+      play sample :drum_cymbal_pedal, amp: 2
+    end
+    sleep 0.75
+  end
+  play sample :bd_808
+  with_fx :hpf, cutoff: 90 do
+    play sample :drum_cymbal_pedal
+  end
+  sleep 0.75
+  with_fx :reverb, mix: 0.5 do
+    with_fx :lpf do
+      play sample :drum_snare_soft, amp: 0.75, \
+        rate: [0.9, 1, 1.1].choose
+      sleep 0.5
+    end
+  end
+end
+
+sleep 1.75
+
+with_fx :reverb, mix: 0.5 do
+  with_fx :lpf do
+    play sample :drum_snare_soft, amp: 1.5, \
+      rate: [0.9, 1, 1.1].choose
+  end
+end
+
+sleep 0.55
+
+live_loop :cres do # added 12Dec2015
+  sleep 18.5
+  with_fx :level, amp: [1, 0.5, 0.75].choose do
+    with_fx :reverb, amp: 2, mix: 0.2 do
+      with_synth :blade do
+        play 66, attack: 6, sustain: 1, \
+          release: 0.1, vibrato_rate: 2.1, pan: 1, pan_slide: 3
+        with_fx :pitch_shift do
+          play 78, amp: 1.4, attack: 6, sustain: 1, \
+            release: 0.1, vibrato_rate: 1.9, pan: -1, pan_slide: 4
+          play 90, amp: 1, attack: 6.5, sustain: 1, \
+            release: 0.3, vibrato_rate: 3, pan: 0
+        end
+      end
+    end
+  end
+end
+
+live_loop :arp do
+  4.times do
+    y += 1
+    puts "y is #{y}"
+    with_synth [:square, :sine].choose do
+      if y < 13
+        if one_in(2)
+          play [78, 80, 81, 90].choose, amp: [0.5, 0.4].choose, \
+            release: 0.4
+        end
+        sleep 0.125
+      else
+        y = 0
+        sleep [6, 3].choose
+      end
+    end
+  end
+  with_fx :echo do
+    y += 1
+    puts "y is #{y}"
+    with_synth [:square, :sine].choose do
+      if y < 13
+        if one_in(2)
+          play [78, 80, 81, 90].choose, amp: [0.5, 0.4].choose, \
+            release: 0.4
+        end
+        sleep 0.125
+      else
+        y = 0
+        sleep [6, 3].choose
+      end
+    end
+  end
+end
+
+live_loop :arp2 do
+  4.times do
+    y += 1
+    puts "y is #{y}"
+    with_synth [:square, :sine].choose do
+      if y < 3
+        if one_in(3)
+          play [87, 89, 90].choose, amp: [0.5, 0.4].choose, \
+            release: 0.2
+        end
+        sleep 0.125
+      else
+        y = 0
+        sleep [6, 3].choose
+      end
+    end
+  end
+  with_fx :echo do
+    y += 1
+    puts "y is #{y}"
+    with_synth [:square, :sine].choose do
+      if y < 13
+        if one_in(2)
+          play [78, 80, 81, 90].choose, amp: [0.5, 0.4].choose, \
+            release: 0.4
+        end
+        sleep 0.125
+      else
+        y = 0
+        sleep [6, 3].choose
+      end
+    end
+  end
+end
+
+live_loop :pulsing do
+  x += 1
+  puts x
+  with_fx :pan, pan: [-0.2, -0.1, 0, 0.1, 0.2].choose do
+    with_synth :prophet do
+      if x < 16
+        with_fx :flanger do
+          play 69, amp: 0.4, release: 0.5,\
+            cutoff: 70 + -x, res: 0.75 + x*0.01
+          play 76, amp: 0.4, release: 0.5,\
+            cutoff: 70 + 3*x, res: 0.75 + x*0.01
+          sleep 0.5
+        end
+      else
+        play 64, attack: 0.75, release: 1.5, pan_slide: 1
+        play 76, cutoff: 70 + x, res: 0.5
+        sleep 1
+        x = 0
+      end
+    end
+  end
+end
+
+live_loop :das_beat, delay: 63 do
+  3.times do
+    with_fx :reverb, mix: 0.25 do
+      play sample :bd_808, amp: 2
+      sleep 0.75
+    end
+    play sample :bd_808
+    sleep 0.75
+    with_fx :reverb, mix: 0.4 do
+      with_fx :lpf do
+        play sample :drum_snare_soft, amp: 1, rate: [0.9, 1, 1.1].choose
+        sleep 0.5
+      end
+    end
+  end
+  sleep 3
+end
+
+live_loop :hat do
+  z += 1
+  with_fx :hpf, cutoff: z do
+    puts "zzzzzzzzzzz ============= #{z}"
+    6.times do
+      play sample :drum_cymbal_pedal, amp: 2
+      sleep 0.25
+      3.times do
+        play sample :drum_cymbal_pedal
+        sleep 0.25
+      end
+    end
+    play sample :drum_cymbal_pedal, amp: 2
+    sleep 3
+  end
+end
+
+live_loop :hatFX, delay: 34 do
+  6.times do
+    play sample :bd_boom, amp: [2, 1, 2, 1].choose
+    with_fx :echo do
+      play 66
+      play sample :elec_filt_snare, decay: 3
+      sleep 4
+      with_synth :pulse do
+        play [66, 69], attack_level: 2, release: 0.5
+        sleep 2
+      end
+    end
+  end
+  sleep 12
+end
