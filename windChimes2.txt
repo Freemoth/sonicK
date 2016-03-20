@@ -1,0 +1,55 @@
+# windChimes2.txt
+# coded by sonic(K) 09Jan2016
+# changed pitches 20Mar2016
+
+use_bpm 20
+use_debug false
+x, y = 0, 0
+notes1 = [        87,    90.5, 92,   94         ]
+notes2 = [    85, 87,    90,   92.5             ]
+notes3 = [        87.5,          92,      96    ]
+notes4 = [    85,        90,         94.5       ]
+notes5 = [ 83,                 92,            97]
+notes6 = [           88,             94         ]
+
+with_sample_pack "D:/SonicPi/my-samples" do
+  sample :robin2, amp: 2
+end
+
+with_fx :ring_mod, freq: 0.01, mix: rrand(0.3, 0.7), amp: 0.4 do
+  live_loop :chime1, delay: 1.25 do
+    with_synth :pretty_bell do
+      5.times do
+        puts "chime1"
+        x = rrand_i(1, 4)
+        notes = [notes1, notes2, notes3, notes4, notes5, notes6].choose
+        with_fx :flanger, phase: x, pre_amp: 0.5 do
+          play_pattern_timed notes.shuffle, [rrand(0.4, 2)], amp: 0.3, attack: rrand(0, 0.01), \
+            pan: rrand(-0.3, 0.6)
+          puts notes.shuffle
+        end
+        puts "x: #{x}"
+      end
+      sleep x
+      puts "sleep x: #{x}"
+    end
+  end
+
+  live_loop :chime2 do
+    with_synth :pretty_bell do
+      3.times do
+        puts "chime2"
+        y = rrand_i(1, 4)
+        notes = [notes1, notes2, notes3, notes4, notes5, notes6].choose
+        with_fx :flanger, phase: y, pre_amp: 0.4 do
+          play_pattern_timed notes.shuffle, [rrand(0.5, 3)], amp: 0.3, attack: rrand(0, 0.01), \
+            pan: rrand(-0.55, 0.3)
+          puts notes.shuffle
+        end
+        puts "y: #{y}"
+      end
+      sleep 2*y
+      puts "sleep y: #{y}"
+    end
+  end
+end
