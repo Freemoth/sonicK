@@ -1,4 +1,4 @@
 # sonic(K)
-My Sonic Pi code experiments and musical environments.
+My Sonic Pi code experiments and musical environments have been moved to my gists https://gist.github.com/Freemoth.
 
-Selected recordings available at https://soundcloud.com/freemoth/
+Links to selected recordings are referenced in the respective gist comment.
